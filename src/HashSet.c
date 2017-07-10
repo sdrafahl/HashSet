@@ -7,7 +7,9 @@
 typedef struct NodeStruct Node;
 static unsigned int hashNumber(Hash* hash,unsigned int key);
 static Node* searchRightForNode(Node* node , unsigned int key);
+static int placeNodeAtEndOfLinkedChain(Node* from ,Node* node);
 static Node* newNode(void* data, unsigned int key);
+static int deleteNode(Node* node);
 
 struct NodeStruct {
     unsigned int key;
@@ -31,21 +33,21 @@ Hash* newHash(unsigned int size) {
 int insert(Hash* hash, void* data, unsigned int key) {
     unsigned int hashed = hashNumber(hash, key);
     Node* node = newNode(data, key);
-    if((hash)->node + hashed) {
-        if(((hash)->node + hashed)->key != key) {
+    if(*(hash->node + hashed)) {
+        Node* node = (*(hash->node + hashed));
+        if((*(hash->node + hashed))->key != key) {
             placeNodeAtEndOfLinkedChain((*((hash)->node + hashed))->right, node);
         }
     }else{
         (*((hash)->node + hashed)) = node;
     }
-    hash->size++;
     return 0;
 }
 
-int delete(unsigned int key) {
-    unsigned int hashed = hashNumber(key);
-    if((*hash)->node + hashed) {
-        Node *node = searchRightForNode((*hash)->node + hashed);
+int delete(Hash* hash, unsigned int key) {
+    unsigned int hashed = hashNumber(hash, key);
+    if((hash)->node + hashed) {
+        Node *node = searchRightForNode((*(hash->node)) + hashed, key);
         if(node) {
             deleteNode(node);
         }
@@ -53,10 +55,12 @@ int delete(unsigned int key) {
     return 0;
 }
 
-void* search(unsigned int key) {
-    unsigned int hashed = hashNumber(key);
-    if((*hash)->node + hashed) {
-        return searchRightForNode((*hash)->node + hashed)->data;
+void* search(Hash* hash, unsigned int key) {
+    unsigned int hashed = hashNumber(hash, key);
+    if((hash)->node + hashed) {
+        return searchRightForNode((*(hash->node + hashed)), key)->data;
+    }else{
+        return NULL;
     }
 }
 
@@ -110,11 +114,11 @@ static Node* searchRightForNode(Node* node , unsigned int key) {
         if(!node->right) {
             return NULL;
         }
-        searchRightForNode(node->right);
+        return searchRightForNode(node->right, key);
     }
 }
 
-static unsigned int hashNumber(Hash hash,unsigned int key) {
+static unsigned int hashNumber(Hash* hash,unsigned int key) {
     float const A = (sqrt(5.0)-1.0)/2.0;
     unsigned int size = hash->size;
     return (unsigned int)floor(size * (key * A - floor(key * A)));
