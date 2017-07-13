@@ -46,8 +46,9 @@ int insert(Hash* hash, void* data, unsigned int key) {
 
 int delete(Hash* hash, unsigned int key) {
     unsigned int hashed = hashNumber(hash, key);
-    if((hash)->node + hashed) {
-        Node *node = searchRightForNode((*(hash->node)) + hashed, key);
+    if(*(hash->node + hashed)) {
+        Node* baseNode = *(hash->node + hashed);
+        Node* node = searchRightForNode(baseNode, key);
         if(node) {
             deleteNode(node);
         }
@@ -57,8 +58,9 @@ int delete(Hash* hash, unsigned int key) {
 
 void* search(Hash* hash, unsigned int key) {
     unsigned int hashed = hashNumber(hash, key);
-    if((hash)->node + hashed) {
-        return searchRightForNode((*(hash->node + hashed)), key)->data;
+    Node* node = *(hash->node + hashed);
+    if(node->data) {
+        return searchRightForNode(node, key)->data;
     }else{
         return NULL;
     }
@@ -108,9 +110,10 @@ static int placeNodeAtEndOfLinkedChain(Node* from ,Node* node) {
 }
 
 static Node* searchRightForNode(Node* node , unsigned int key) {
+    
     if(node->key == key) {
         return node;
-    }else{
+    } else {
         if(!node->right) {
             return NULL;
         }
