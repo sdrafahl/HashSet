@@ -6,6 +6,8 @@ A simple hash set
 
 After cloning the repository run the MakeFile and it should generate an executable to demonstrait the hashset. If you use the hashset please give me credit.
 
+Note: for macs you may need to remove the -Static keyword for it to compile.
+
 ### Prerequisites
 
 GCC
