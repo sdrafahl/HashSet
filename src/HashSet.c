@@ -88,29 +88,27 @@ static int placeNodeAtEndOfLinkedChain(Node* from ,Node* node) {
     node->key = 0;
     node->data = NULL;
     if(node->right && !(node->left)) {
-        free(node);
         node = node->right;
         node = NULL;
     }else{
         if(node->right && node->left) {
-            free(node);
             node->right->left = node->left;
             node->left->right = node->right;
             node = NULL;
         }else{
             if(!(node->right)) {
-                free(node);
                 node = NULL;
             }else{
                 return 1;
             }
         }
     }
+    free(node);
     return 0;
 }
 
 static Node* searchRightForNode(Node* node , unsigned int key) {
-    
+
     if(node->key == key) {
         return node;
     } else {
